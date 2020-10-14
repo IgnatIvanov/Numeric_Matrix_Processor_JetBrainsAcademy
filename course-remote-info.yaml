@@ -12,7 +12,7 @@ stages:
   is_completed: true
 - id: 530
   step: 8750
-  is_completed: false
+  is_completed: true
 - id: 531
   step: 8751
   is_completed: false
@@ -84,7 +84,7 @@ topics:
   - title: Components of computational thinking
     theory_id: 8745
   - title: IDE
-    theory_id: 3805
+    theory_id: 10996
   - title: Tuple
     theory_id: 7462
   - title: Invoking a function
