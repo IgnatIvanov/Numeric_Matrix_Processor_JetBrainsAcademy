@@ -19,12 +19,37 @@ def matrixmult(m1, m2):
             t = []
     return m3
 
+def det(matrix):
+    if len(matrix) == 0:
+        return 0
+    if len(matrix) == 1:
+        return matrix[0][0]
+    if len(matrix) == 2:
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    if len(matrix) > 2:
+        answer = 0
+
+        for i in range(len(matrix)):
+            a_matrix = []
+            for x in range(len(matrix)):
+                T = []
+                for y in range(len(matrix)):
+                    T.append(matrix[x][y])
+                a_matrix.append(T)
+            del a_matrix[i]
+            for j in range(len(a_matrix)):
+                del a_matrix[j][0]
+            answer += det(a_matrix) * pow(-1, 0 + i) * matrix[i][0]
+        return answer
+
 option = 100
 while option != 0:
     print("""1. Add matrices
 2. Multiply matrix by a constant
 3. Multiply matrices
 4. Transpose matrix
+5. Calculate a determinant
+6. Inverse matrix
 0. Exit""")
     option = int(input("Your choice: "))
 
@@ -80,17 +105,6 @@ while option != 0:
             print('The operation cannot be performed.')
         else:
             answer = []
-            #row = []
-            #for i in range(int(dimm1[0])):
-            #    row.append(0)
-            #for i in range(int(dimm2[1])):
-            #    answer.append(row)
-
-            #for row in range(int(dimm1[0])):
-            #    for column in range(int(dimm2[1])):
-
-
-            #        answer[row][column] = +
             answer = matrixmult(matrix1, matrix2)
 
             print("The result is:")
@@ -152,4 +166,56 @@ while option != 0:
 
             print("The result is:")
             for row in range(int(dimm[0])):
+                print(*answer[row])
+    elif option == 5:
+        dimm = input("Enter matrix size: ").split(' ')
+        m = []
+        print("Enter matrix: ")
+        for row in range(int(dimm[0])):
+            in_str = input().split(' ')
+            m.append([float(x) for x in in_str])
+
+        print(det(m))
+    elif option == 6:
+        dimm = input("Enter matrix size: ").split(' ')
+        m = []
+        print("Enter matrix: ")
+        for row in range(int(dimm[0])):
+            in_str = input().split(' ')
+            m.append([float(x) for x in in_str])
+
+        answer = []
+        cofactors_m = []
+        transposed_cofactors_m = []
+        for x in range(len(m)):
+            T = []
+            for y in range(len(m)):
+                T.append(0)
+            cofactors_m.append(T)
+
+        det_m = det(m)
+        if det_m == 0:
+            print("This matrix doesn't have an inverse.")
+        else:
+            for column in range(len(m)):
+                for row in range(len(m)):
+                    minor_matrix = []
+                    for x in range(len(m)):
+                        T = []
+                        for y in range(len(m)):
+                            T.append(m[x][y])
+                        minor_matrix.append(T)
+                    del minor_matrix[column]
+                    for j in range(len(minor_matrix)):
+                        del minor_matrix[j][row]
+                    cofactors_m[column][row] = det(minor_matrix) * pow(-1, column + row)
+
+            for row in range(len(m)):
+                T = []
+                for column in range(len(m)):
+                    T.append(cofactors_m[column][row])
+                transposed_cofactors_m.append(T)
+
+            for row in range(int(dimm[0])):
+                answer.append([transposed_cofactors_m[row][column] / det_m for column in range(len(m))])
                 print(*answer[row])
